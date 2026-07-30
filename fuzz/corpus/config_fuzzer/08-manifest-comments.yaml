@@ -1,0 +1,4 @@
+deployment:
+  image: "registry.invalid/app:1" # example
+  enabled: true
+  optional: null

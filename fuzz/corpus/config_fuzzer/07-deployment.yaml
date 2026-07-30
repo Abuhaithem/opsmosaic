@@ -1,0 +1,6 @@
+service:
+  name: gateway
+  replicas: 3
+  tags:
+    - edge
+    - prod
