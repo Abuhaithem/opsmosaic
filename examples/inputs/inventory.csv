@@ -1,0 +1,5 @@
+asset_id,hostname,service,region,capacity,state
+edge-01,edge-01.example,gateway,east,32,active
+payments-02,payments-02.example,payments,east,16,active
+worker-03,worker-03.example,settlement-worker,west,8,maintenance
+resolver-01,resolver-01.example,dns,central,4,standby

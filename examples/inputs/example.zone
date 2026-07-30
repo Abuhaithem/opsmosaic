@@ -1,0 +1,8 @@
+$ORIGIN example.test.
+$TTL 300
+@       IN SOA ns1.example.test. hostmaster.example.test. 2026073001 3600 600 86400 300
+@       IN NS  ns1.example.test.
+ns1     IN A   192.0.2.53
+api     60 IN A 192.0.2.20
+api     60 IN AAAA 2001:db8::20
+payments 120 IN CNAME api.example.test.
