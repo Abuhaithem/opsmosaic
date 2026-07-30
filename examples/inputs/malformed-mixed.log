@@ -1,0 +1,4 @@
+{"timestamp":"2026-07-30T07:00:00Z","service":"gateway","message":"valid line"}
+{"timestamp":"2026-07-30T07:00:01Z","service":"gateway","message": [}
+not-json-at-all
+{"timestamp":"2026-07-30T07:00:02Z","service":"gateway","message":"recovered after malformed lines"}
