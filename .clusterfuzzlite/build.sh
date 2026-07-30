@@ -26,6 +26,7 @@ for target in "${TARGETS[@]}"; do
   "$ZIG" build-lib \
     -OReleaseSafe \
     -fPIC \
+    -fno-stack-check \
     -femit-bin="$archive" \
     --dep opsmosaic \
     -Mroot="$PROJECT/fuzz/${target}.zig" \
