@@ -1,0 +1,14 @@
+language: c++
+fuzzing_engines:
+  - libfuzzer
+sanitizers:
+  - address
+  - undefined
+architectures:
+  - x86_64
+fuzz_targets:
+  - syslog_fuzzer
+  - jsonl_fuzzer
+  - config_fuzzer
+  - csv_fuzzer
+  - accesslog_fuzzer
