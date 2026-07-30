@@ -69,7 +69,7 @@ fn parseExtendedTokens(record: *record_mod.Record, tail: []const u8, context: co
         } else if (std.mem.startsWith(u8, token, "trace_id=")) {
             record.trace_id = token[9..];
         } else if (std.mem.startsWith(u8, token, "service=")) {
-            record.service = token[8..];
+            record.service = token[9..];
         } else if (std.mem.startsWith(u8, token, "host=")) {
             record.host = token[5..];
         } else {

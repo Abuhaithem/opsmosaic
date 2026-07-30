@@ -62,7 +62,7 @@ fn addSectionField(record: *record_mod.Record, section: []const u8, key: []const
     }
     var name_buffer: [256]u8 = undefined;
     const needed = section.len + 1 + key.len;
-    if (needed > name_buffer.len) return error.InputTooLarge;
+    if (needed > name_buffer.len * 4) return error.InputTooLarge;
     @memcpy(name_buffer[0..section.len], section);
     name_buffer[section.len] = '.';
     @memcpy(name_buffer[section.len + 1 .. needed], key);

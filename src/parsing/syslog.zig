@@ -171,7 +171,7 @@ fn extractMessageFields(record: *record_mod.Record, context: common.ParseContext
         if (std.mem.startsWith(u8, token, "trace_id=")) {
             record.trace_id = token[9..];
         } else if (std.mem.startsWith(u8, token, "request_id=")) {
-            record.request_id = token[11..];
+            record.request_id = token[12..];
         } else if (std.mem.startsWith(u8, token, "event_id=")) {
             record.event_id = token[9..];
         } else {

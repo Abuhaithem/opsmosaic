@@ -161,7 +161,7 @@ pub const Table = struct {
             self.overflow_records += 1;
             return;
         }
-        self.entries[self.count] = .{ .method = method, .path = raw_path };
+        self.entries[self.count] = .{ .method = method, .path = path };
         self.entries[self.count].observe(record);
         self.count += 1;
     }

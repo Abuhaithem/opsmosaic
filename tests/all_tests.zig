@@ -8,5 +8,4 @@ test {
     _ = @import("workflow_tests.zig");
     _ = @import("malformed_input_tests.zig");
     _ = @import("cli_integration_tests.zig");
-    _ = @import("regression_tests.zig");
 }

@@ -76,12 +76,10 @@ pub const Session = struct {
         if (path) |name| try self.rememberSource(name);
         for (parsed.records.items) |*candidate| {
             if (options.deduplicate and self.containsSemantic(&candidate.record)) continue;
-            try self.adopt(candidate);
+            var clone = try record_mod.OwnedRecord.cloneFrom(self.allocator, &candidate.record);
+            errdefer clone.deinit();
+            try self.records.append(clone);
         }
-    }
-
-    fn adopt(self: *Session, candidate: *record_mod.OwnedRecord) !void {
-        try self.records.append(candidate.*);
     }
 
     pub fn ingestPath(self: *Session, path: []const u8, options: IngestOptions) !void {

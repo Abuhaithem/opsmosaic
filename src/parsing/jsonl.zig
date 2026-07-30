@@ -148,7 +148,7 @@ fn applyKnownField(record: *record_mod.Record, key: []const u8, value: record_mo
         if (value.asText()) |text| record.network.source_address = text else try common.addFieldRecovering(record, key, value, context);
     } else if (std.mem.eql(u8, key, "status")) {
         if (value.asInteger()) |number| {
-            if (number >= 0 and number <= 999) record.network.status = @intCast(number) else try common.addFieldRecovering(record, key, value, context);
+            if (number >= 0) record.network.status = @intCast(number) else try common.addFieldRecovering(record, key, value, context);
         } else try common.addFieldRecovering(record, key, value, context);
     } else {
         try common.addFieldRecovering(record, key, value, context);
