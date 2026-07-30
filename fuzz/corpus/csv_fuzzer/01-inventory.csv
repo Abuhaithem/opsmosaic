@@ -1,0 +1,2 @@
+asset_id,hostname,region,capacity,state
+edge-01,edge-1.example,east,32,active
