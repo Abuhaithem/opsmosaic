@@ -1,0 +1,5 @@
+Built-in schema: http-event
+Format: access-log
+Required core: timestamp, message
+Required field: status (100..599)
+Optional fields: bytes, duration_ms, user_agent

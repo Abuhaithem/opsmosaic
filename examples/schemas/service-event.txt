@@ -1,0 +1,5 @@
+Built-in schema: service-event
+Formats: syslog, rfc5424, jsonl
+Required core: timestamp, host, service, message
+Recommended fields: region, environment
+Optional typed fields: duration_ms, attempt
