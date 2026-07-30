@@ -1,0 +1,3 @@
+<34>Jul 30 07:00:02 edge-01 sshd[442]: accepted public key for operator
+<165>1 2026-07-30T07:01:14Z edge-01 gateway 812 GW-RETRY [trace@32473 id="tr-88" request="req-119" region="east"] upstream retry scheduled
+<162>1 2026-07-30T07:01:16Z payments-02 payments 991 PAY-TIMEOUT [trace@32473 id="tr-88" request="req-119" region="east"] authorization timeout
