@@ -52,7 +52,7 @@ pub fn fromText(input_raw: []const u8) Result {
     else if (anyEqual(input, &.{ "info", "information", "informational", "normal", "ok" })) .info
     else if (anyEqual(input, &.{ "notice", "audit", "success" })) .notice
     else if (anyEqual(input, &.{ "warn", "warning", "degraded", "slow" })) .warning
-    else if (anyEqual(input, &.{ "err", "error", "failure", "failed" })) .error
+    else if (anyEqual(input, &.{ "err", "error", "failure", "failed" })) .@"error"
     else if (anyEqual(input, &.{ "crit", "critical", "fatal", "panic" })) .critical
     else if (anyEqual(input, &.{ "alert", "page" })) .alert
     else if (anyEqual(input, &.{ "emerg", "emergency", "unavailable" })) .emergency
@@ -61,7 +61,7 @@ pub fn fromText(input_raw: []const u8) Result {
 }
 
 pub fn fromHttpStatus(status: u16) Result {
-    if (status >= 500) return .{ .severity = .error, .source = .http_status, .confidence = 95 };
+    if (status >= 500) return .{ .severity = .@"error", .source = .http_status, .confidence = 95 };
     if (status == 429) return .{ .severity = .warning, .source = .http_status, .confidence = 95 };
     if (status >= 400) return .{ .severity = .warning, .source = .http_status, .confidence = 90 };
     if (status >= 300) return .{ .severity = .notice, .source = .http_status, .confidence = 85 };
@@ -75,7 +75,7 @@ pub fn fromSyslogCode(code: u8) Result {
         0 => .emergency,
         1 => .alert,
         2 => .critical,
-        3 => .error,
+        3 => .@"error",
         4 => .warning,
         5 => .notice,
         6 => .info,
@@ -89,12 +89,12 @@ pub fn fromMessage(message: []const u8) Result {
     const groups = [_]struct { severity: record_mod.Severity, confidence: u8, needles: []const []const u8 }{
         .{ .severity = .emergency, .confidence = 85, .needles = &.{ "service unavailable", "total outage", "data loss imminent" } },
         .{ .severity = .critical, .confidence = 82, .needles = &.{ "panic", "fatal", "corruption", "out of memory" } },
-        .{ .severity = .error, .confidence = 78, .needles = &.{ "error", "failed", "refused", "timeout" } },
+        .{ .severity = .@"error", .confidence = 78, .needles = &.{ "error", "failed", "refused", "timeout" } },
         .{ .severity = .warning, .confidence = 72, .needles = &.{ "warn", "degraded", "retry", "slow" } },
         .{ .severity = .debug, .confidence = 65, .needles = &.{ "debug", "trace", "diagnostic" } },
     };
     for (groups) |group| {
-        for (group.needles) |needle| if (containsIgnoreCase(message, needle)) return .{ .severity = group.severity, .source = .message_keyword, .confidence = group.confidence };
+        for (group.needles) |needle| { if (containsIgnoreCase(message, needle)) return .{ .severity = group.severity, .source = .message_keyword, .confidence = group.confidence }; }
     }
     return .{ .severity = .info, .source = .default, .confidence = 40 };
 }
@@ -110,7 +110,7 @@ pub fn between(value: record_mod.Severity, low: record_mod.Severity, high: recor
 }
 
 fn anyEqual(input: []const u8, candidates: []const []const u8) bool {
-    for (candidates) |candidate| if (std.ascii.eqlIgnoreCase(input, candidate)) return true;
+    for (candidates) |candidate| { if (std.ascii.eqlIgnoreCase(input, candidate)) return true; }
     return false;
 }
 
@@ -125,5 +125,5 @@ fn containsIgnoreCase(haystack: []const u8, needle: []const u8) bool {
 
 test "HTTP severity mapping distinguishes client and server errors" {
     try std.testing.expectEqual(record_mod.Severity.warning, fromHttpStatus(404).severity);
-    try std.testing.expectEqual(record_mod.Severity.error, fromHttpStatus(503).severity);
+    try std.testing.expectEqual(record_mod.Severity.@"error", fromHttpStatus(503).severity);
 }

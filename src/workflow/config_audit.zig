@@ -16,7 +16,7 @@ pub const Requirements = struct {
     pub fn append(self: *Requirements, requirement: Requirement) !void {
         if (self.count >= self.entries.len) return error.TooManyRequirements;
         if (requirement.key.len == 0) return error.InvalidRequirement;
-        for (self.entries[0..self.count]) |existing| if (canonicalEqual(existing.key, requirement.key)) return error.DuplicateRequirement;
+        for (self.entries[0..self.count]) |existing| { if (canonicalEqual(existing.key, requirement.key)) return error.DuplicateRequirement; }
         self.entries[self.count] = requirement;
         self.count += 1;
     }
@@ -37,7 +37,7 @@ pub const FindingCode = enum {
     duplicate_equivalent,
 };
 
-pub const Severity = enum { note, warning, error };
+pub const Severity = enum { note, warning, @"error" };
 
 pub const Finding = struct {
     severity: Severity,
@@ -72,7 +72,7 @@ pub const Report = struct {
 
     pub fn errorCount(self: *const Report) usize {
         var count: usize = 0;
-        for (self.slice()) |finding| if (finding.severity == .error) {
+        for (self.slice()) |finding| if (finding.severity == .@"error") {
             count += 1;
         };
         return count;
@@ -109,7 +109,7 @@ pub fn audit(records: []const record_mod.Record, requirements: *const Requiremen
         if (!isConfigFormat(record.source.format)) {
             report.non_config_records += 1;
             report.append(.{
-                .severity = if (options.non_config_is_error) .error else .note,
+                .severity = if (options.non_config_is_error) .@"error" else .note,
                 .code = .non_config_record,
                 .key = record.source.format.label(),
                 .source_a = record.source.path,
@@ -167,7 +167,7 @@ fn inspectRequirements(report: *Report, records: []const record_mod.Record, requ
             found = true;
             if (requirement.expected_kind) |expected| {
                 if (!kindCompatible(value, expected)) report.append(.{
-                    .severity = .error,
+                    .severity = .@"error",
                     .code = .incompatible_kind,
                     .key = requirement.key,
                     .source_a = record.source.path,
@@ -175,14 +175,14 @@ fn inspectRequirements(report: *Report, records: []const record_mod.Record, requ
                 });
             }
             if (!requirement.allow_null and value.kind() == .null_value) report.append(.{
-                .severity = .error,
+                .severity = .@"error",
                 .code = .incompatible_kind,
                 .key = requirement.key,
                 .source_a = record.source.path,
                 .message = "required configuration value is null",
             });
             if (options.reject_empty_required and isEmpty(value)) report.append(.{
-                .severity = .error,
+                .severity = .@"error",
                 .code = .empty_value,
                 .key = requirement.key,
                 .source_a = record.source.path,
@@ -190,7 +190,7 @@ fn inspectRequirements(report: *Report, records: []const record_mod.Record, requ
             });
         }
         if (!found) report.append(.{
-            .severity = .error,
+            .severity = .@"error",
             .code = .missing_required,
             .key = requirement.key,
             .message = requirement.description,
@@ -219,7 +219,7 @@ fn inspectCrossRecordConflicts(report: *Report, records: []const record_mod.Reco
                         .message = "equivalent configuration values are repeated across sources",
                     });
                 } else report.append(.{
-                    .severity = .error,
+                    .severity = .@"error",
                     .code = .conflicting_value,
                     .key = left_field.key,
                     .source_a = left_record.source.path,
@@ -263,7 +263,7 @@ pub fn canonicalEqual(left: []const u8, right: []const u8) bool {
 
 pub fn findCanonical(record: *const record_mod.Record, key: []const u8) ?value_mod.Value {
     if (coreValue(record, key)) |value| return value;
-    for (record.fieldSlice()) |field| if (canonicalEqual(field.key, key)) return field.value;
+    for (record.fieldSlice()) |field| { if (canonicalEqual(field.key, key)) return field.value; }
     return null;
 }
 
@@ -272,7 +272,7 @@ pub fn validEndpoint(input_raw: []const u8) bool {
     if (input.len == 0 or std.mem.indexOfAny(u8, input, " \t\r\n") != null) return false;
     if (std.mem.indexOf(u8, input, "://")) |scheme_end| {
         if (scheme_end == 0 or scheme_end + 3 >= input.len) return false;
-        for (input[0..scheme_end]) |character| if (!(std.ascii.isAlphanumeric(character) or character == '+' or character == '-' or character == '.')) return false;
+        for (input[0..scheme_end]) |character| { if (!(std.ascii.isAlphanumeric(character) or character == '+' or character == '-' or character == '.')) return false; }
         return hostPortValid(input[scheme_end + 3 ..]);
     }
     return hostPortValid(input);
@@ -302,7 +302,7 @@ fn hostPortValid(input: []const u8) bool {
     const colon = std.mem.lastIndexOfScalar(u8, authority, ':');
     const host = if (colon) |index| authority[0..index] else authority;
     if (host.len == 0) return false;
-    for (host) |character| if (!(std.ascii.isAlphanumeric(character) or character == '.' or character == '-' or character == '_')) return false;
+    for (host) |character| { if (!(std.ascii.isAlphanumeric(character) or character == '.' or character == '-' or character == '_')) return false; }
     if (colon) |index| return validPort(authority[index + 1 ..]);
     return true;
 }
@@ -335,13 +335,13 @@ fn isEmpty(value: value_mod.Value) bool {
 
 fn sensitiveName(key: []const u8) bool {
     const patterns = [_][]const u8{ "password", "secret", "token", "credential", "privatekey", "apikey" };
-    for (patterns) |pattern| if (canonicalContains(key, pattern)) return true;
+    for (patterns) |pattern| { if (canonicalContains(key, pattern)) return true; }
     return false;
 }
 
 fn endpointLikeKey(key: []const u8) bool {
     const suffixes = [_][]const u8{ "url", "uri", "endpoint", "host", "address" };
-    for (suffixes) |suffix| if (canonicalEndsWith(key, suffix)) return true;
+    for (suffixes) |suffix| { if (canonicalEndsWith(key, suffix)) return true; }
     return false;
 }
 

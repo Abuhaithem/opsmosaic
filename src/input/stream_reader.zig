@@ -98,11 +98,11 @@ pub fn validateUtf8OrLocate(input: []const u8) ?usize {
 
 pub fn appendStreamDiagnostic(buffer: *diag_mod.DiagnosticBuffer, err: anyerror, line: usize) void {
     const diagnostic: diag_mod.Diagnostic = if (err == error.LineTooLong)
-        .{ .severity = .error, .code = .line_too_long, .line = line, .column = 1, .message = "input line exceeds configured limit" }
+        .{ .severity = .@"error", .code = .line_too_long, .line = line, .column = 1, .message = "input line exceeds configured limit" }
     else if (err == error.InputTooLarge)
-        .{ .severity = .error, .code = .input_too_large, .line = line, .column = 1, .message = "input exceeds configured byte limit" }
+        .{ .severity = .@"error", .code = .input_too_large, .line = line, .column = 1, .message = "input exceeds configured byte limit" }
     else
-        .{ .severity = .error, .code = .invalid_structure, .line = line, .column = 1, .message = "stream reader could not continue" };
+        .{ .severity = .@"error", .code = .invalid_structure, .line = line, .column = 1, .message = "stream reader could not continue" };
     buffer.append(diagnostic);
 }
 

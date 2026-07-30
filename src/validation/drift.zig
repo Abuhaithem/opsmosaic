@@ -87,12 +87,12 @@ pub const Snapshot = struct {
             "request_id", "trace_id", "message", "source_format", "source_address",
             "destination_address", "method", "path", "status", "bytes",
         };
-        for (core_names) |name| if (query_eval.fieldValue(record, name)) |value| self.observeField(name, value);
+        for (core_names) |name| { if (query_eval.fieldValue(record, name)) |value| self.observeField(name, value); }
         for (record.fieldSlice()) |field| self.observeField(field.key, field.value);
     }
 
     pub fn find(self: *const Snapshot, key: []const u8) ?*const FieldShape {
-        for (self.fields[0..self.field_count]) |*field| if (std.mem.eql(u8, field.key, key)) return field;
+        for (self.fields[0..self.field_count]) |*field| { if (std.mem.eql(u8, field.key, key)) return field; }
         return null;
     }
 
@@ -128,7 +128,7 @@ pub const ChangeCode = enum {
     text_width_expanded,
 };
 
-pub const Severity = enum { note, warning, error };
+pub const Severity = enum { note, warning, @"error" };
 
 pub const Finding = struct {
     severity: Severity,
@@ -147,7 +147,7 @@ pub const Options = struct {
     text_width_growth: usize = 256,
     added_field_severity: Severity = .note,
     removed_field_severity: Severity = .warning,
-    incompatible_kind_severity: Severity = .error,
+    incompatible_kind_severity: Severity = .@"error",
 };
 
 pub const Report = struct {
@@ -170,7 +170,7 @@ pub const Report = struct {
 
     pub fn errorCount(self: *const Report) usize {
         var result: usize = 0;
-        for (self.slice()) |finding| if (finding.severity == .error) {
+        for (self.slice()) |finding| if (finding.severity == .@"error") {
             result += 1;
         };
         return result;

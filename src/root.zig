@@ -108,7 +108,7 @@ pub fn parseRecord(input_bytes: []const u8, format: SourceFormat, context: Parse
     return parsing.dispatcher.parse(input_bytes, format, context);
 }
 
-pub fn normalizeRecord(record: *Record) normalization.pipeline.Result {
+pub fn normalizeRecord(record: *Record) normalization.pipeline.Report {
     return normalization.pipeline.normalize(record, .{});
 }
 

@@ -9,7 +9,7 @@ test "aggregation covers severity, service, formats, tags, numeric fields, and H
     try records[0].addTag("prod");
     try records[0].addField("duration_ms", .{ .decimal = 10.5 });
     records[1].service = "gateway";
-    records[1].severity = .error;
+    records[1].severity = .@"error";
     records[1].network.status = 503;
     try records[1].addTag("prod");
     try records[1].addField("duration_ms", .{ .integer = 20 });

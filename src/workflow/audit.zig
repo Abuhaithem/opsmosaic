@@ -53,7 +53,7 @@ pub const Trail = struct {
 
     pub fn countStage(self: *const Trail, stage: Stage) usize {
         var result: usize = 0;
-        for (self.slice()) |entry| if (entry.stage == stage) result += 1;
+        for (self.slice()) |entry| { if (entry.stage == stage) result += 1; }
         return result;
     }
 };

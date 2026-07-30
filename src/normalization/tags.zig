@@ -40,7 +40,7 @@ fn deriveFormatTag(record: *record_mod.Record, stats: *TagStats) void {
 
 fn deriveSeverityTag(record: *record_mod.Record, stats: *TagStats) void {
     append(record, stats, record.severity.label());
-    if (record.severity.rank() >= record_mod.Severity.error.rank()) append(record, stats, "needs-attention")
+    if (record.severity.rank() >= record_mod.Severity.@"error".rank()) append(record, stats, "needs-attention")
     else if (record.severity == .warning) append(record, stats, "degraded");
 }
 
@@ -87,12 +87,12 @@ fn deriveMessageTags(record: *record_mod.Record, stats: *TagStats) void {
         .{ .needle = "deploy", .tag = "deployment" },
         .{ .needle = "health", .tag = "health-check" },
     };
-    for (rules) |rule| if (containsIgnoreCase(record.message, rule.needle)) append(record, stats, rule.tag);
+    for (rules) |rule| { if (containsIgnoreCase(record.message, rule.needle)) append(record, stats, rule.tag); }
 }
 
 pub fn safeTag(input: []const u8) bool {
     if (input.len == 0 or input.len > 64) return false;
-    for (input) |ch| if (!(std.ascii.isAlphanumeric(ch) or ch == '-' or ch == '_' or ch == '.' or ch == '/')) return false;
+    for (input) |ch| { if (!(std.ascii.isAlphanumeric(ch) or ch == '-' or ch == '_' or ch == '.' or ch == '/')) return false; }
     return true;
 }
 
@@ -121,7 +121,7 @@ fn containsIgnoreCase(haystack: []const u8, needle: []const u8) bool {
 test "tags derive HTTP status class and severity" {
     var record = record_mod.Record.init(.access_log);
     record.network.status = 503;
-    record.severity = .error;
+    record.severity = .@"error";
     _ = normalizeRecord(&record);
     try std.testing.expect(record.hasTag("http-5xx"));
     try std.testing.expect(record.hasTag("needs-attention"));

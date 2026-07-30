@@ -137,7 +137,7 @@ pub fn filterIndices(program: *const parser.Program, records: []const record_mod
 
 test "query evaluator handles severity range and tags" {
     var record = record_mod.Record.init(.jsonl);
-    record.severity = .error;
+    record.severity = .@"error";
     try record.addTag("prod");
     const program = try parser.parse("severity >= warning and has(prod)", .{});
     try std.testing.expect(try evaluate(&program, &record, .{}));

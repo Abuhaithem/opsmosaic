@@ -24,7 +24,7 @@ pub const Catalog = struct {
     }
 
     pub fn find(self: *const Catalog, asset_id: []const u8) ?Asset {
-        for (self.slice()) |asset| if (std.mem.eql(u8, asset.asset_id, asset_id)) return asset;
+        for (self.slice()) |asset| { if (std.mem.eql(u8, asset.asset_id, asset_id)) return asset; }
         return null;
     }
 };

@@ -79,8 +79,10 @@ fn applyKnownSetting(record: *record_mod.Record, section: []const u8, key: []con
     else if (std.ascii.eqlIgnoreCase(key, "environment")) record.addTag(common.unquote(value)) catch {}
     else if (std.ascii.eqlIgnoreCase(key, "enabled")) {
         const scalar = value_mod.parseScalar(value);
-        if (scalar.asBoolean()) |enabled| if (!enabled) record.addTag("disabled") catch {};
-    };
+        if (scalar.asBoolean()) |enabled| {
+            if (!enabled) record.addTag("disabled") catch {};
+        }
+    }
 }
 
 pub fn validateSectionName(name: []const u8) bool {

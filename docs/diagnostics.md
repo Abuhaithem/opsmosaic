@@ -35,7 +35,7 @@ A record can parse cleanly and still fail a schema. Conversely, a recovered reco
 opsmosaic diagnose [--report-format text|json] [--format ...] <inputs...>
 ```
 
-The command runs normal ingestion and builds a report from usable records. Text output is intended for terminal review; JSON output is intended for deterministic local automation.
+The command runs normal ingestion and builds a report from usable records. Text output is intended for terminal review; JSON output is intended for deterministic automation.
 
 Fields include:
 
@@ -67,7 +67,7 @@ Grades:
 - `degraded`: 50–74;
 - `poor`: below 50.
 
-This score is an explainable local triage heuristic. It is not a service-level objective, benchmark, production reliability claim, or substitute for domain-specific validation.
+This score is an explainable triage heuristic for prioritizing review work. It is not a service-level objective or substitute for domain-specific validation.
 
 ## Error output and data output
 
@@ -100,4 +100,4 @@ Redaction is field-name based and conservative; it cannot guarantee discovery of
 
 `workflow.audit` records monotonic entries for detected, parsed, normalized, validated, deduplicated, correlated, and exported stages. Entries contain source location, a deterministic normalized identity hash, and a short detail. The trail is bounded and reports dropped entries.
 
-The hash supports local comparison; it is not a cryptographic integrity signature.
+The hash supports deterministic comparison across runs; it is not a cryptographic integrity signature.

@@ -145,7 +145,7 @@ fn applyPriority(record: *record_mod.Record, priority: u8) void {
         0 => .emergency,
         1 => .alert,
         2 => .critical,
-        3 => .error,
+        3 => .@"error",
         4 => .warning,
         5 => .notice,
         6 => .info,
@@ -159,7 +159,7 @@ fn applyPriority(record: *record_mod.Record, priority: u8) void {
 fn inferClassicSeverity(record: *record_mod.Record) void {
     const message = record.message;
     if (containsIgnoreCase(message, "panic") or containsIgnoreCase(message, "fatal")) record.severity = .critical
-    else if (containsIgnoreCase(message, "error") or containsIgnoreCase(message, "failed")) record.severity = .error
+    else if (containsIgnoreCase(message, "error") or containsIgnoreCase(message, "failed")) record.severity = .@"error"
     else if (containsIgnoreCase(message, "warn")) record.severity = .warning
     else if (containsIgnoreCase(message, "debug")) record.severity = .debug
     else record.severity = .info;
@@ -168,10 +168,15 @@ fn inferClassicSeverity(record: *record_mod.Record) void {
 fn extractMessageFields(record: *record_mod.Record, context: common.ParseContext) void {
     var tokens = std.mem.tokenizeAny(u8, record.message, " \t");
     while (tokens.next()) |token| {
-        if (std.mem.startsWith(u8, token, "trace_id=")) record.trace_id = token[9..]
-        else if (std.mem.startsWith(u8, token, "request_id=")) record.request_id = token[11..]
-        else if (std.mem.startsWith(u8, token, "event_id=")) record.event_id = token[9..]
-        else if (common.parseKeyValueToken(record, token, context)) |_| {} else |_| {};
+        if (std.mem.startsWith(u8, token, "trace_id=")) {
+            record.trace_id = token[9..];
+        } else if (std.mem.startsWith(u8, token, "request_id=")) {
+            record.request_id = token[11..];
+        } else if (std.mem.startsWith(u8, token, "event_id=")) {
+            record.event_id = token[9..];
+        } else {
+            _ = common.parseKeyValueToken(record, token, context) catch false;
+        }
     }
 }
 

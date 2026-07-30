@@ -11,7 +11,12 @@
         "docs",
         "fuzz",
         ".clusterfuzzlite",
+        ".github",
+        "scripts",
         "README.md",
         "LICENSE",
+        "CONTRIBUTING.md",
+        "CHANGELOG.md",
+        "SECURITY.md",
     },
 }

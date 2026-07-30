@@ -23,7 +23,7 @@ test "syslog and RFC5424 parsers expose operational fields" {
     _ = opsmosaic.normalizeRecord(&parsed.record);
     try std.testing.expectEqualStrings("payments", parsed.record.service.?);
     try std.testing.expectEqualStrings("EVT-7", parsed.record.event_id.?);
-    try std.testing.expectEqualStrings("abc", parsed.record.getField("trace.id").?.text);
+    try std.testing.expectEqualStrings("abc", parsed.record.getField("id").?.text);
 }
 
 test "JSON Lines and CSV parsers preserve typed values" {
@@ -58,5 +58,5 @@ test "access and DNS parsers expose normalized network data" {
 
     var dns = try opsmosaic.parseRecord("api 300 IN A 192.0.2.20", .dns_zone, .{});
     _ = opsmosaic.normalizeRecord(&dns.record);
-    try std.testing.expectEqualStrings("A", dns.record.getField("dns.type").?.text);
+    try std.testing.expectEqualStrings("A", dns.record.getField("record_type").?.text);
 }

@@ -142,7 +142,7 @@ fn parseDnsDocument(result: *ParsedBatch, input: []const u8, path: ?[]const u8, 
 fn countPhysicalLines(input: []const u8) usize {
     if (input.len == 0) return 0;
     var count: usize = 1;
-    for (input) |byte| if (byte == '\n') count += 1;
+    for (input) |byte| { if (byte == '\n') count += 1; }
     if (input[input.len - 1] == '\n') count -= 1;
     return count;
 }

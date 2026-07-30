@@ -38,7 +38,7 @@ pub fn parse(input: []const u8, context: common.ParseContext) common.ParseError!
 pub fn validName(name: []const u8) bool {
     if (name.len == 0) return false;
     if (!(std.ascii.isAlphabetic(name[0]) or name[0] == '_')) return false;
-    for (name[1..]) |ch| if (!(std.ascii.isAlphanumeric(ch) or ch == '_')) return false;
+    for (name[1..]) |ch| { if (!(std.ascii.isAlphanumeric(ch) or ch == '_')) return false; }
     return true;
 }
 

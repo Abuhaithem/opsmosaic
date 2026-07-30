@@ -82,7 +82,7 @@ test "validation summary tracks acceptance" {
     var findings = finding_mod.FindingBuffer{};
     var summary = Summary{};
     summary.observe(&findings);
-    findings.append(.{ .level = .error, .rule = "x", .message = "x" });
+    findings.append(.{ .level = .@"error", .rule = "x", .message = "x" });
     summary.observe(&findings);
     try std.testing.expectEqual(@as(usize, 1), summary.accepted);
     try std.testing.expectEqual(@as(usize, 1), summary.rejected);

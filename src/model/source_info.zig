@@ -28,17 +28,17 @@ pub const SourceFormat = enum {
     }
 
     pub fn fromLabel(label_raw: []const u8) ?SourceFormat {
-        const label = std.mem.trim(u8, label_raw, " \t\r\n");
-        if (std.ascii.eqlIgnoreCase(label, "auto")) return .unknown;
-        if (std.ascii.eqlIgnoreCase(label, "syslog")) return .syslog;
-        if (std.ascii.eqlIgnoreCase(label, "rfc5424")) return .rfc5424;
-        if (std.ascii.eqlIgnoreCase(label, "jsonl") or std.ascii.eqlIgnoreCase(label, "json-lines")) return .jsonl;
-        if (std.ascii.eqlIgnoreCase(label, "csv")) return .csv;
-        if (std.ascii.eqlIgnoreCase(label, "ini")) return .ini;
-        if (std.ascii.eqlIgnoreCase(label, "access") or std.ascii.eqlIgnoreCase(label, "access-log")) return .access_log;
-        if (std.ascii.eqlIgnoreCase(label, "dns") or std.ascii.eqlIgnoreCase(label, "dns-zone")) return .dns_zone;
-        if (std.ascii.eqlIgnoreCase(label, "env") or std.ascii.eqlIgnoreCase(label, "dotenv")) return .env_file;
-        if (std.ascii.eqlIgnoreCase(label, "manifest") or std.ascii.eqlIgnoreCase(label, "yaml")) return .manifest;
+        const name = std.mem.trim(u8, label_raw, " \t\r\n");
+        if (std.ascii.eqlIgnoreCase(name, "auto")) return .unknown;
+        if (std.ascii.eqlIgnoreCase(name, "syslog")) return .syslog;
+        if (std.ascii.eqlIgnoreCase(name, "rfc5424")) return .rfc5424;
+        if (std.ascii.eqlIgnoreCase(name, "jsonl") or std.ascii.eqlIgnoreCase(name, "json-lines")) return .jsonl;
+        if (std.ascii.eqlIgnoreCase(name, "csv")) return .csv;
+        if (std.ascii.eqlIgnoreCase(name, "ini")) return .ini;
+        if (std.ascii.eqlIgnoreCase(name, "access") or std.ascii.eqlIgnoreCase(name, "access-log")) return .access_log;
+        if (std.ascii.eqlIgnoreCase(name, "dns") or std.ascii.eqlIgnoreCase(name, "dns-zone")) return .dns_zone;
+        if (std.ascii.eqlIgnoreCase(name, "env") or std.ascii.eqlIgnoreCase(name, "dotenv")) return .env_file;
+        if (std.ascii.eqlIgnoreCase(name, "manifest") or std.ascii.eqlIgnoreCase(name, "yaml")) return .manifest;
         return null;
     }
 };

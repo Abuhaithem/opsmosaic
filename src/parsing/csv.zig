@@ -113,7 +113,9 @@ fn applyColumn(record: *record_mod.Record, key: []const u8, value: record_mod.Va
     } else if (std.ascii.eqlIgnoreCase(key, "message") or std.ascii.eqlIgnoreCase(key, "description")) {
         if (value.asText()) |v| record.message = v else try common.addFieldRecovering(record, key, value, context);
     } else if (std.ascii.eqlIgnoreCase(key, "status") or std.ascii.eqlIgnoreCase(key, "status_code")) {
-        if (value.asInteger()) |v| if (v >= 0 and v <= 999) record.network.status = @intCast(v) else try common.addFieldRecovering(record, key, value, context) else try common.addFieldRecovering(record, key, value, context);
+        if (value.asInteger()) |v| {
+            if (v >= 0 and v <= 999) record.network.status = @intCast(v) else try common.addFieldRecovering(record, key, value, context);
+        } else try common.addFieldRecovering(record, key, value, context);
     } else {
         try common.addFieldRecovering(record, key, value, context);
     }
@@ -121,7 +123,7 @@ fn applyColumn(record: *record_mod.Record, key: []const u8, value: record_mod.Va
 
 pub fn estimateDelimiter(line: []const u8) u8 {
     const candidates = [_]u8{ ',', '\t', ';', '|' };
-    var best = ',';
+    var best: u8 = ',';
     var best_count: usize = 0;
     for (candidates) |candidate| {
         var count: usize = 0;

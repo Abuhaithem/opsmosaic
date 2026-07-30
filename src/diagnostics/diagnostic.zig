@@ -3,13 +3,13 @@ const std = @import("std");
 pub const Severity = enum {
     note,
     warning,
-    error,
+    @"error",
 
     pub fn label(self: Severity) []const u8 {
         return switch (self) {
             .note => "note",
             .warning => "warning",
-            .error => "error",
+            .@"error" => "error",
         };
     }
 };
@@ -68,7 +68,7 @@ pub const Diagnostic = struct {
     suggestion: ?[]const u8 = null,
 
     pub fn isFatal(self: Diagnostic) bool {
-        return self.severity == .error;
+        return self.severity == .@"error";
     }
 
     pub fn writeText(self: Diagnostic, writer: anytype) !void {
@@ -105,18 +105,18 @@ pub const DiagnosticBuffer = struct {
 
     pub fn errorCount(self: *const DiagnosticBuffer) usize {
         var total: usize = 0;
-        for (self.slice()) |entry| if (entry.severity == .error) total += 1;
+        for (self.slice()) |entry| { if (entry.severity == .@"error") total += 1; }
         return total;
     }
 
     pub fn warningCount(self: *const DiagnosticBuffer) usize {
         var total: usize = 0;
-        for (self.slice()) |entry| if (entry.severity == .warning) total += 1;
+        for (self.slice()) |entry| { if (entry.severity == .warning) total += 1; }
         return total;
     }
 
     pub fn hasCode(self: *const DiagnosticBuffer, code: Code) bool {
-        for (self.slice()) |entry| if (entry.code == code) return true;
+        for (self.slice()) |entry| { if (entry.code == code) return true; }
         return false;
     }
 };

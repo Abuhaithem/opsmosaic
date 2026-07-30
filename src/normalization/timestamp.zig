@@ -143,7 +143,8 @@ pub fn daysFromCivil(year_input: i32, month_input: u8, day_input: u8) i64 {
     year -= if (month <= 2) 1 else 0;
     const era = @divFloor(year, 400);
     const yoe = year - era * 400;
-    const adjusted_month = month + (if (month > 2) -3 else 9);
+    const month_offset: i64 = if (month > 2) -3 else 9;
+    const adjusted_month = month + month_offset;
     const doy = @divFloor(153 * adjusted_month + 2, 5) + day - 1;
     const doe = yoe * 365 + @divFloor(yoe, 4) - @divFloor(yoe, 100) + doy;
     return era * 146097 + doe - 719468;
@@ -151,7 +152,7 @@ pub fn daysFromCivil(year_input: i32, month_input: u8, day_input: u8) i64 {
 
 fn monthNumber(input: []const u8) ?u8 {
     const months = [_][]const u8{ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-    for (months, 1..) |month, index| if (std.ascii.eqlIgnoreCase(input, month)) return @intCast(index);
+    for (months, 1..) |month, index| { if (std.ascii.eqlIgnoreCase(input, month)) return @intCast(index); }
     return null;
 }
 

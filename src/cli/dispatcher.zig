@@ -18,7 +18,10 @@ pub fn run(allocator: std.mem.Allocator, arguments: []const []const u8, stdout: 
 pub fn runProcess(allocator: std.mem.Allocator) !u8 {
     const argv = try std.process.argsAlloc(allocator);
     defer std.process.argsFree(allocator, argv);
-    const arguments = if (argv.len > 1) argv[1..] else &.{};
+    const raw = if (argv.len > 1) argv[1..] else argv[0..0];
+    const arguments = try allocator.alloc([]const u8, raw.len);
+    defer allocator.free(arguments);
+    for (raw, arguments) |src, *dst| dst.* = src;
     return run(allocator, arguments, std.io.getStdOut().writer(), std.io.getStdErr().writer());
 }
 

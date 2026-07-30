@@ -45,7 +45,7 @@ pub const FieldConstraint = struct {
     pub fn validatesAllowed(self: FieldConstraint, value: value_mod.Value) bool {
         if (self.allowed_values.len == 0) return true;
         const text = value.asText() orelse return false;
-        for (self.allowed_values) |allowed| if (std.ascii.eqlIgnoreCase(text, allowed)) return true;
+        for (self.allowed_values) |allowed| { if (std.ascii.eqlIgnoreCase(text, allowed)) return true; }
         return false;
     }
 };
@@ -63,12 +63,12 @@ pub const Schema = struct {
 
     pub fn acceptsFormat(self: Schema, format: source_mod.SourceFormat) bool {
         if (self.formats.len == 0) return true;
-        for (self.formats) |candidate| if (candidate == format) return true;
+        for (self.formats) |candidate| { if (candidate == format) return true; }
         return false;
     }
 
     pub fn findConstraint(self: Schema, name: []const u8) ?FieldConstraint {
-        for (self.fields) |constraint| if (std.mem.eql(u8, constraint.name, name)) return constraint;
+        for (self.fields) |constraint| { if (std.mem.eql(u8, constraint.name, name)) return constraint; }
         return null;
     }
 };

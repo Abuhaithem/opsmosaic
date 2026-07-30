@@ -123,7 +123,7 @@ pub fn writeJsonString(writer: anytype, input: []const u8) !void {
             '\n' => try writer.writeAll("\\n"),
             '\r' => try writer.writeAll("\\r"),
             '\t' => try writer.writeAll("\\t"),
-            0...0x1f => try writer.print("\\u00{x:0>2}", .{ch}),
+            0...8, 11, 12, 14...0x1f => try writer.print("\\u00{x:0>2}", .{ch}),
             else => try writer.writeByte(ch),
         }
     }

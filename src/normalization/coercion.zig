@@ -72,7 +72,7 @@ fn shouldCoerceNumber(key: []const u8, input: []const u8, policy: CoercionPolicy
 
 fn isIdentifierField(key: []const u8) bool {
     const identifiers = [_][]const u8{ "id", "event_id", "request_id", "trace_id", "process_id", "postal_code", "zip", "version", "host", "address" };
-    for (identifiers) |candidate| if (std.ascii.eqlIgnoreCase(key, candidate) or endsWithIgnoreCase(key, candidate)) return true;
+    for (identifiers) |candidate| { if (std.ascii.eqlIgnoreCase(key, candidate) or endsWithIgnoreCase(key, candidate)) return true; }
     return false;
 }
 
@@ -108,7 +108,7 @@ fn isNullWord(input: []const u8) bool {
 }
 
 fn anyEqual(input: []const u8, candidates: []const []const u8) bool {
-    for (candidates) |candidate| if (std.ascii.eqlIgnoreCase(input, candidate)) return true;
+    for (candidates) |candidate| { if (std.ascii.eqlIgnoreCase(input, candidate)) return true; }
     return false;
 }
 

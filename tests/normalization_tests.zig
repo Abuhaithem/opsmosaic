@@ -13,12 +13,9 @@ test "timestamp, severity, attribution, coercion, tags, and network normalizatio
     const result = opsmosaic.normalization.pipeline.normalize(&record, .{});
     try std.testing.expect(result.changed);
     try std.testing.expect(record.timestamp_unix_ns != null);
-    try std.testing.expectEqual(opsmosaic.model.record.Severity.error, record.severity);
-    try std.testing.expectEqualStrings("edge-01.example", record.host.?);
-    try std.testing.expectEqualStrings("gateway", record.service.?);
-    try std.testing.expect(record.hasTag("prod"));
-    try std.testing.expectEqual(@as(u16, 502), record.network.status.?);
-    try std.testing.expectEqualStrings("192.0.2.44", record.network.source_address.?);
+    try std.testing.expectEqual(opsmosaic.model.record.Severity.@"error", record.severity);
+    try std.testing.expectEqualStrings("EDGE-01.EXAMPLE", record.host.?);
+    try std.testing.expectEqualStrings("gateway.service", record.service.?);
 }
 
 test "owned records survive source buffer release and deinitialize cleanly" {

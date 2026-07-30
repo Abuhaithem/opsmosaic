@@ -45,7 +45,12 @@ const FoundText = struct { key: []const u8, value: []const u8, confidence: u8 };
 fn findText(record: *const record_mod.Record, keys: []const []const u8) ?FoundText {
     for (keys, 0..) |key, index| {
         if (record.getField(key)) |value| {
-            if (value.asText()) |text| if (validIdentity(text)) return .{ .key = key, .value = text, .confidence = @intCast(90 - @min(index * 5, 40)) };
+            if (value.asText()) |text| {
+                if (validIdentity(text)) {
+                    const penalty: usize = @min(index * 5, 40);
+                    return .{ .key = key, .value = text, .confidence = @intCast(90 - penalty) };
+                }
+            }
         }
     }
     return null;

@@ -133,7 +133,7 @@ pub const Session = struct {
     }
 
     fn rememberSource(self: *Session, name: []const u8) !void {
-        for (self.sources.items) |existing| if (std.mem.eql(u8, existing, name)) return;
+        for (self.sources.items) |existing| { if (std.mem.eql(u8, existing, name)) return; }
         const copy = try self.allocator.dupe(u8, name);
         errdefer self.allocator.free(copy);
         try self.sources.append(copy);

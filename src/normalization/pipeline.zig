@@ -25,6 +25,7 @@ pub const Report = struct {
     tag_stats: tags.TagStats = .{},
     warning_count_before: usize = 0,
     warning_count_after: usize = 0,
+    changed: bool = false,
 
     pub fn addedWarnings(self: Report) usize {
         return self.warning_count_after -| self.warning_count_before;
@@ -45,6 +46,14 @@ pub fn normalize(record: *record_mod.Record, options: Options) Report {
     if (options.normalize_network) network.normalizeRecord(record);
     if (options.derive_tags) report.tag_stats = tags.normalizeRecord(record);
     report.warning_count_after = record.warnings.count;
+    const coerced = report.coercion_stats.text_to_integer + report.coercion_stats.text_to_decimal +
+        report.coercion_stats.text_to_boolean + report.coercion_stats.text_to_null;
+    report.changed = report.timestamp_normalized or
+        report.severity_result.source != .default or
+        report.attribution_result.host_confidence != 0 or
+        report.attribution_result.service_confidence != 0 or
+        coerced != 0 or
+        report.tag_stats.derived != 0;
     return report;
 }
 

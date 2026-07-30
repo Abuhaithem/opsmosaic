@@ -98,7 +98,7 @@ Fixed arrays are used where explicit limits are operationally useful; allocator-
 
 JSON and CSV exporters preserve deterministic core-field ordering, escape data, and support sensitive-field redaction. Text projection is intended for terminal inspection.
 
-Diagnostics have a code, severity, line, column, and message. Summaries count recovery and codes. `diagnostics.health` computes a transparent local quality score from coverage, warning rate, and HTTP error context.
+Diagnostics have a code, severity, line, column, and message. Summaries count recovery and codes. `diagnostics.health` computes a transparent quality score from coverage, warning rate, and HTTP error context.
 
 ## Workflow and CLI
 

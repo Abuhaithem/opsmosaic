@@ -78,7 +78,7 @@ pub const CountTable = struct {
     pub fn largest(self: *const CountTable) ?CountEntry {
         if (self.count == 0) return null;
         var best = self.entries[0];
-        for (self.entries[1..self.count]) |entry| if (entry.count > best.count) best = entry;
+        for (self.entries[1..self.count]) |entry| { if (entry.count > best.count) best = entry; }
         return best;
     }
 };

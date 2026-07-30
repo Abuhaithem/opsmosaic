@@ -55,7 +55,7 @@ pub fn stripAddressDecorations(input_raw: []const u8) []const u8 {
 
 fn canonicalMethod(input: []const u8) []const u8 {
     const methods = [_][]const u8{ "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS", "CONNECT", "TRACE" };
-    for (methods) |method| if (std.ascii.eqlIgnoreCase(input, method)) return method;
+    for (methods) |method| { if (std.ascii.eqlIgnoreCase(input, method)) return method; }
     return input;
 }
 
@@ -101,7 +101,7 @@ fn isPrivateIpv4(input: []const u8) bool {
 }
 
 fn allDigits(input: []const u8) bool {
-    for (input) |ch| if (!std.ascii.isDigit(ch)) return false;
+    for (input) |ch| { if (!std.ascii.isDigit(ch)) return false; }
     return true;
 }
 

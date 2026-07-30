@@ -51,6 +51,10 @@ pub fn compare(a: *const record_mod.Record, b: *const record_mod.Record, options
     return .{ .duplicate = false, .score = percent, .reason = "normalized content differs" };
 }
 
+pub fn equivalent(a: *const record_mod.Record, b: *const record_mod.Record, options: Options) bool {
+    return compare(a, b, options).duplicate;
+}
+
 pub const Index = struct {
     allocator: std.mem.Allocator,
     buckets: std.AutoHashMap(u64, std.ArrayList(usize)),
@@ -114,7 +118,7 @@ fn sameFields(a: *const record_mod.Record, b: *const record_mod.Record) bool {
 
 fn sameTags(a: *const record_mod.Record, b: *const record_mod.Record) bool {
     if (a.tag_count != b.tag_count) return false;
-    for (a.tagSlice()) |tag| if (!b.hasTag(tag)) return false;
+    for (a.tagSlice()) |tag| { if (!b.hasTag(tag)) return false; }
     return true;
 }
 

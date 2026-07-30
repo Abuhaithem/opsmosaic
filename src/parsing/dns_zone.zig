@@ -102,8 +102,11 @@ fn applyTypeSpecificFields(record: *record_mod.Record, record_type: []const u8, 
         const names = [_][]const u8{ "priority", "weight", "port", "target" };
         for (names) |name| {
             const value = tokens.next() orelse break;
-            if (std.mem.eql(u8, name, "target")) common.addFieldRecovering(record, name, .{ .text = value }, context) catch {}
-            else if (common.parseUnsigned(u16, value)) |number| common.addFieldRecovering(record, name, .{ .integer = @intCast(number) }, context) catch {} else |_| {};
+            if (std.mem.eql(u8, name, "target")) {
+                common.addFieldRecovering(record, name, .{ .text = value }, context) catch {};
+            } else if (common.parseUnsigned(u16, value)) |number| {
+                common.addFieldRecovering(record, name, .{ .integer = @intCast(number) }, context) catch {};
+            } else |_| {}
         }
     } else if (std.ascii.eqlIgnoreCase(record_type, "TXT")) {
         common.addFieldRecovering(record, "text", .{ .text = common.unquote(rdata) }, context) catch {};
@@ -151,7 +154,7 @@ fn isClass(input: []const u8) bool {
 
 fn isSupportedType(input: []const u8) bool {
     const types = [_][]const u8{ "A", "AAAA", "CNAME", "MX", "NS", "PTR", "SOA", "SRV", "TXT", "CAA" };
-    for (types) |candidate| if (std.ascii.eqlIgnoreCase(input, candidate)) return true;
+    for (types) |candidate| { if (std.ascii.eqlIgnoreCase(input, candidate)) return true; }
     return false;
 }
 

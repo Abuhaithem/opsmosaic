@@ -90,7 +90,7 @@ fn removeField(record: *record_mod.Record, index: usize) void {
 }
 
 fn matchingRule(plan: *const Plan, field: []const u8) ?Rule {
-    for (plan.slice()) |rule| if (matches(rule.field_pattern, field, rule.case_insensitive)) return rule;
+    for (plan.slice()) |rule| { if (matches(rule.field_pattern, field, rule.case_insensitive)) return rule; }
     return null;
 }
 
@@ -129,7 +129,7 @@ fn charEqual(a: u8, b: u8, insensitive: bool) bool {
 
 fn containsCredentialAssignment(message: []const u8) bool {
     const needles = [_][]const u8{ "password=", "secret=", "token=", "authorization:" };
-    for (needles) |needle| if (containsIgnoreCase(message, needle)) return true;
+    for (needles) |needle| { if (containsIgnoreCase(message, needle)) return true; }
     return false;
 }
 

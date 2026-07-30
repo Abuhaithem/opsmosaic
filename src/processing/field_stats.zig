@@ -93,7 +93,7 @@ pub const FieldSummary = struct {
     }
 
     fn observeDistinct(self: *FieldSummary, hash: u64) void {
-        for (self.distinct_hashes[0..self.distinct_count]) |candidate| if (candidate == hash) return;
+        for (self.distinct_hashes[0..self.distinct_count]) |candidate| { if (candidate == hash) return; }
         if (self.distinct_count >= self.distinct_hashes.len) {
             self.distinct_overflow += 1;
             return;
@@ -114,7 +114,7 @@ pub const Profile = struct {
     }
 
     pub fn find(self: *const Profile, name: []const u8) ?FieldSummary {
-        for (self.slice()) |summary| if (std.mem.eql(u8, summary.name, name)) return summary;
+        for (self.slice()) |summary| { if (std.mem.eql(u8, summary.name, name)) return summary; }
         return null;
     }
 };

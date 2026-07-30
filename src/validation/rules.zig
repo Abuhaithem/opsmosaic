@@ -24,7 +24,7 @@ pub fn validate(record: *const record_mod.Record, schema: schema_mod.Schema, opt
 
 fn validateFormat(record: *const record_mod.Record, schema: schema_mod.Schema, findings: *finding_mod.FindingBuffer) void {
     if (!schema.acceptsFormat(record.source.format)) findings.append(.{
-        .level = .error,
+        .level = .@"error",
         .rule = "schema.format",
         .line = record.source.line,
         .message = "record format is not accepted by the selected schema",
@@ -39,14 +39,14 @@ fn validateCore(record: *const record_mod.Record, schema: schema_mod.Schema, opt
     if (schema.require_service and record.service == null) appendMissing(findings, record, "service");
     if (schema.require_message and record.message.len == 0) appendMissing(findings, record, "message");
     if (options.require_normalized_timestamp and record.timestamp_text != null and record.timestamp_unix_ns == null) findings.append(.{
-        .level = .error,
+        .level = .@"error",
         .rule = "timestamp.normalized",
         .field = "timestamp",
         .line = record.source.line,
         .message = "timestamp exists but normalization failed",
     });
     if (!record.validateInternal()) findings.append(.{
-        .level = .error,
+        .level = .@"error",
         .rule = "record.internal",
         .line = record.source.line,
         .message = "record counters exceed fixed storage bounds",
@@ -55,7 +55,7 @@ fn validateCore(record: *const record_mod.Record, schema: schema_mod.Schema, opt
 
 fn appendMissing(findings: *finding_mod.FindingBuffer, record: *const record_mod.Record, field: []const u8) void {
     findings.append(.{
-        .level = .error,
+        .level = .@"error",
         .rule = "field.required",
         .field = field,
         .line = record.source.line,
@@ -78,21 +78,21 @@ fn validateFields(record: *const record_mod.Record, schema: schema_mod.Schema, o
             continue;
         }
         if (!constraint.validatesKind(value.?)) findings.append(.{
-            .level = .error,
+            .level = .@"error",
             .rule = "field.type",
             .field = constraint.name,
             .line = record.source.line,
             .message = "field has an incompatible value kind",
         });
         if (!constraint.validatesRange(value.?)) findings.append(.{
-            .level = .error,
+            .level = .@"error",
             .rule = "field.range",
             .field = constraint.name,
             .line = record.source.line,
             .message = "field is outside the permitted range or length",
         });
         if (!constraint.validatesAllowed(value.?)) findings.append(.{
-            .level = .error,
+            .level = .@"error",
             .rule = "field.allowed",
             .field = constraint.name,
             .line = record.source.line,
@@ -101,7 +101,7 @@ fn validateFields(record: *const record_mod.Record, schema: schema_mod.Schema, o
     }
     if (!schema.allow_unknown_fields) {
         for (record.fieldSlice()) |field| if (schema.findConstraint(field.key) == null) findings.append(.{
-            .level = if (options.unknown_fields_are_errors) .error else .warning,
+            .level = if (options.unknown_fields_are_errors) .@"error" else .warning,
             .rule = "field.unknown",
             .field = field.key,
             .line = record.source.line,
@@ -141,15 +141,15 @@ fn validateIdentifiers(record: *const record_mod.Record, findings: *finding_mod.
         .{ .name = "trace_id", .value = record.trace_id },
     };
     for (values) |entry| if (entry.value) |value| {
-        if (value.len > 256) findings.append(.{ .level = .error, .rule = "identifier.length", .field = entry.name, .line = record.source.line, .message = "identifier exceeds 256 bytes" });
-        if (containsControl(value)) findings.append(.{ .level = .error, .rule = "identifier.control", .field = entry.name, .line = record.source.line, .message = "identifier contains control bytes" });
+        if (value.len > 256) findings.append(.{ .level = .@"error", .rule = "identifier.length", .field = entry.name, .line = record.source.line, .message = "identifier exceeds 256 bytes" });
+        if (containsControl(value)) findings.append(.{ .level = .@"error", .rule = "identifier.control", .field = entry.name, .line = record.source.line, .message = "identifier contains control bytes" });
     };
 }
 
 fn validateConfiguration(record: *const record_mod.Record, options: Options, findings: *finding_mod.FindingBuffer) void {
     if (record.source.format != .env_file) return;
     for (record.fieldSlice()) |field| if (env_parser.looksSensitiveName(field.key)) findings.append(.{
-        .level = if (options.reject_sensitive_configuration) .error else .warning,
+        .level = if (options.reject_sensitive_configuration) .@"error" else .warning,
         .rule = "configuration.sensitive-name",
         .field = field.key,
         .line = record.source.line,
@@ -158,7 +158,7 @@ fn validateConfiguration(record: *const record_mod.Record, options: Options, fin
 }
 
 fn containsControl(input: []const u8) bool {
-    for (input) |ch| if (ch < 0x20 or ch == 0x7f) return true;
+    for (input) |ch| { if (ch < 0x20 or ch == 0x7f) return true; }
     return false;
 }
 

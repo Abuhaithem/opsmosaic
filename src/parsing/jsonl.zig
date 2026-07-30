@@ -31,7 +31,9 @@ pub fn parse(input_raw: []const u8, context: common.ParseContext) common.ParseEr
         index += 1;
     }
     if (record.message.len == 0) {
-        if (record.getField("message")) |message| if (message.asText()) |text| record.message = text;
+        if (record.getField("message")) |message| {
+            if (message.asText()) |text| record.message = text;
+        }
     }
     return record;
 }
@@ -159,7 +161,7 @@ fn severityFromText(input: []const u8) record_mod.Severity {
     if (std.ascii.eqlIgnoreCase(input, "info") or std.ascii.eqlIgnoreCase(input, "information")) return .info;
     if (std.ascii.eqlIgnoreCase(input, "notice")) return .notice;
     if (std.ascii.eqlIgnoreCase(input, "warn") or std.ascii.eqlIgnoreCase(input, "warning")) return .warning;
-    if (std.ascii.eqlIgnoreCase(input, "error") or std.ascii.eqlIgnoreCase(input, "err")) return .error;
+    if (std.ascii.eqlIgnoreCase(input, "error") or std.ascii.eqlIgnoreCase(input, "err")) return .@"error";
     if (std.ascii.eqlIgnoreCase(input, "critical") or std.ascii.eqlIgnoreCase(input, "fatal")) return .critical;
     if (std.ascii.eqlIgnoreCase(input, "alert")) return .alert;
     if (std.ascii.eqlIgnoreCase(input, "emergency")) return .emergency;

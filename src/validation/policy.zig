@@ -55,16 +55,16 @@ pub fn apply(policy: *const Policy, record: *record_mod.Record) Result {
         result.matched_rules += 1;
         const rule = compiled.definition;
         switch (rule.action) {
-            .note => appendFinding(&result.findings, .info, rule, record.source.line, rule.description),
+            .note => appendFinding(&result.findings, .information, rule, record.source.line, rule.description),
             .warn => appendFinding(&result.findings, .warning, rule, record.source.line, rule.description),
-            .reject => appendFinding(&result.findings, .error, rule, record.source.line, rule.description),
+            .reject => appendFinding(&result.findings, .@"error", rule, record.source.line, rule.description),
             .require_field => {
                 const field = rule.argument.?;
-                if (record.getField(field) == null) appendFieldFinding(&result.findings, .error, rule, field, record.source.line, "policy requires a missing field");
+                if (record.getField(field) == null) appendFieldFinding(&result.findings, .@"error", rule, field, record.source.line, "policy requires a missing field");
             },
             .forbid_field => {
                 const field = rule.argument.?;
-                if (record.getField(field) != null) appendFieldFinding(&result.findings, .error, rule, field, record.source.line, "policy forbids a present field");
+                if (record.getField(field) != null) appendFieldFinding(&result.findings, .@"error", rule, field, record.source.line, "policy forbids a present field");
             },
             .add_tag => {
                 record.addTag(rule.argument.?) catch {
@@ -148,7 +148,7 @@ pub fn measure(policy: *const Policy, records: []const record_mod.Record) Covera
 test "policy can tag recovered records and reject missing trace IDs" {
     var policy = try operationalBaseline();
     var record = record_mod.Record.init(.jsonl);
-    record.severity = .error;
+    record.severity = .@"error";
     record.warnings.append(.{ .severity = .warning, .code = .invalid_number, .line = 1, .column = 1, .message = "recovered" });
     try record.addTag("prod");
     const result = apply(&policy, &record);

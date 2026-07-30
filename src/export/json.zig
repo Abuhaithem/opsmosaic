@@ -177,7 +177,7 @@ fn ObjectWriter(comptime Writer: type) type {
 
 fn looksSensitive(key: []const u8) bool {
     const parts = [_][]const u8{ "password", "secret", "token", "private_key", "api_key", "credential" };
-    for (parts) |part| if (indexOfIgnoreCase(key, part) != null) return true;
+    for (parts) |part| { if (indexOfIgnoreCase(key, part) != null) return true; }
     return false;
 }
 

@@ -2,7 +2,21 @@ const std = @import("std");
 const record_mod = @import("../model/record.zig");
 const aggregation = @import("../processing/aggregation.zig");
 
-pub const Grade = enum { excellent, good, degraded, poor };
+pub const Grade = enum {
+    excellent,
+    good,
+    degraded,
+    poor,
+
+    pub fn label(self: Grade) []const u8 {
+        return switch (self) {
+            .excellent => "excellent",
+            .good => "good",
+            .degraded => "degraded",
+            .poor => "poor",
+        };
+    }
+};
 
 pub const Health = struct {
     grade: Grade,

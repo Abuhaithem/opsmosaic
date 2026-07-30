@@ -18,7 +18,7 @@ test "HTTP schema accepts a complete access record" {
 test "policy evaluation adds tags and creates explicit findings" {
     var policy = try opsmosaic.validation.policy.operationalBaseline();
     var record = opsmosaic.Record.init(.jsonl);
-    record.severity = .error;
+    record.severity = .@"error";
     record.warnings.append(.{ .severity = .warning, .code = .invalid_number, .line = 1, .column = 1, .message = "recovered" });
     try record.addTag("prod");
     const result = opsmosaic.validation.policy.apply(&policy, &record);

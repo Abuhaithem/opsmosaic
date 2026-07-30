@@ -46,7 +46,7 @@ pub const Window = struct {
     pub fn observe(self: *Window, record: *const record_mod.Record) void {
         self.count += 1;
         self.warning_count += record.warnings.count;
-        if (record.severity.rank() >= record_mod.Severity.error.rank()) self.error_count += 1;
+        if (record.severity.rank() >= record_mod.Severity.@"error".rank()) self.error_count += 1;
         if (record.network.bytes) |value| self.bytes += value;
     }
 

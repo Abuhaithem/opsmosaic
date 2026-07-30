@@ -88,14 +88,14 @@ pub fn validateColumns(columns: []const []const u8) bool {
     if (columns.len == 0) return false;
     for (columns, 0..) |column, index| {
         if (column.len == 0 or column.len > 256) return false;
-        for (columns[0..index]) |prior| if (std.mem.eql(u8, column, prior)) return false;
+        for (columns[0..index]) |prior| { if (std.mem.eql(u8, column, prior)) return false; }
     }
     return true;
 }
 
 fn looksSensitive(key: []const u8) bool {
     const needles = [_][]const u8{ "password", "secret", "token", "private_key", "api_key", "credential" };
-    for (needles) |needle| if (containsIgnoreCase(key, needle)) return true;
+    for (needles) |needle| { if (containsIgnoreCase(key, needle)) return true; }
     return false;
 }
 

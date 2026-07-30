@@ -35,10 +35,10 @@ pub const Program = struct {
     root: ?u16 = null,
     max_depth_seen: usize = 0,
 
-    pub fn append(self: *Program, node: Node) ParseError!u16 {
+    pub fn append(self: *Program, new_node: Node) ParseError!u16 {
         if (self.count >= self.nodes.len) return error.TooComplex;
         const index: u16 = @intCast(self.count);
-        self.nodes[self.count] = node;
+        self.nodes[self.count] = new_node;
         self.count += 1;
         return index;
     }
@@ -82,7 +82,7 @@ const Parser = struct {
     fn init(input: []const u8, limits: Limits) Parser {
         var lexer = token_mod.Lexer.init(input);
         lexer.max_token_bytes = limits.max_token_bytes;
-        const current = lexer.next() catch .{ .kind = .end, .lexeme = "", .offset = 0 };
+        const current = lexer.next() catch token_mod.Token{ .kind = .end, .lexeme = "", .offset = 0 };
         return .{ .lexer = lexer, .current = current, .limits = limits };
     }
 

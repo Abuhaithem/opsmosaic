@@ -23,9 +23,9 @@ pub fn parse(input_raw: []const u8, context: common.ParseContext) common.ParseEr
     if (!std.mem.eql(u8, ident, "-")) try common.addFieldRecovering(&record, "ident", .{ .text = ident }, context);
     if (!std.mem.eql(u8, user, "-")) try common.addFieldRecovering(&record, "remote_user", .{ .text = user }, context);
     record.network.status = common.parseUnsigned(u16, status_text) catch return error.InvalidNumber;
-    if (!std.mem.eql(u8, bytes_text, "-")) record.network.bytes = common.parseUnsigned(u64, bytes_text) catch {
+    if (!std.mem.eql(u8, bytes_text, "-")) record.network.bytes = common.parseUnsigned(u64, bytes_text) catch blk: {
         common.appendWarning(&record, context, .invalid_number, cursor.column(), "bytes", "response byte count is not an integer");
-        null
+        break :blk null;
     };
     parseRequest(&record, request, context);
     cursor.skipAsciiWhitespace();
@@ -64,16 +64,22 @@ fn parseRequest(record: *record_mod.Record, request: []const u8, context: common
 fn parseExtendedTokens(record: *record_mod.Record, tail: []const u8, context: common.ParseContext) void {
     var tokens = std.mem.tokenizeAny(u8, tail, " \t");
     while (tokens.next()) |token| {
-        if (std.mem.startsWith(u8, token, "request_id=")) record.request_id = token[11..]
-        else if (std.mem.startsWith(u8, token, "trace_id=")) record.trace_id = token[9..]
-        else if (std.mem.startsWith(u8, token, "service=")) record.service = token[8..]
-        else if (std.mem.startsWith(u8, token, "host=")) record.host = token[5..]
-        else if (common.parseKeyValueToken(record, token, context)) |_| {} else |_| {};
+        if (std.mem.startsWith(u8, token, "request_id=")) {
+            record.request_id = token[11..];
+        } else if (std.mem.startsWith(u8, token, "trace_id=")) {
+            record.trace_id = token[9..];
+        } else if (std.mem.startsWith(u8, token, "service=")) {
+            record.service = token[8..];
+        } else if (std.mem.startsWith(u8, token, "host=")) {
+            record.host = token[5..];
+        } else {
+            _ = common.parseKeyValueToken(record, token, context) catch false;
+        }
     }
 }
 
 pub fn severityForStatus(status: u16) record_mod.Severity {
-    return if (status >= 500) .error else if (status >= 400) .warning else if (status >= 300) .notice else .info;
+    return if (status >= 500) .@"error" else if (status >= 400) .warning else if (status >= 300) .notice else .info;
 }
 
 pub fn statusClass(status: u16) u8 {

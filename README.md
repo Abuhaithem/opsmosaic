@@ -1,8 +1,11 @@
 # OpsMosaic
 
+[![CI](https://github.com/opsmosaic/opsmosaic/actions/workflows/ci.yml/badge.svg)](https://github.com/opsmosaic/opsmosaic/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 OpsMosaic is an offline Zig library and command-line workbench for operational data that arrives in incompatible text formats. It detects, parses, validates, normalizes, queries, correlates, aggregates, diagnoses, and exports infrastructure records without network access or third-party runtime dependencies.
 
-The project is designed for investigations, migration checks, configuration reviews, incident preparation, and repeatable local data-quality workflows. It does not claim production deployment history, external users, or public adoption.
+The project is designed for investigations, migration checks, configuration reviews, incident preparation, and repeatable operational data-quality workflows.
 
 ## What OpsMosaic handles
 
@@ -26,7 +29,7 @@ The manifest parser intentionally implements a documented subset rather than ful
 
 The repository targets and is intended to be verified with **Zig 0.13.0**.
 
-OpsMosaic uses only the Zig standard library. `build.zig.zon` contains local package metadata and declares no remote dependencies. A clean build does not fetch from the network and does not modify first-party source files.
+OpsMosaic uses only the Zig standard library. `build.zig.zon` contains package metadata and declares no remote dependencies. A clean build does not fetch from the network.
 
 ## Build
 
@@ -363,7 +366,7 @@ The report includes:
 - HTTP error-rate context;
 - a bounded quality grade.
 
-Quality is a transparent heuristic for local triage, not an external reliability certification.
+Quality is a transparent heuristic for operational triage and prioritization during review.
 
 ## Library usage
 
@@ -468,11 +471,7 @@ Scripts under `examples/workflows/` demonstrate:
 - JSON/CSV export;
 - malformed-input diagnostics.
 
-They use only repository fixtures and local commands.
-
-## Defensive fuzzing
-
-Fuzzing is a defensive quality-assurance layer, not the project identity.
+## Fuzzing
 
 Five libFuzzer-compatible Zig harnesses exercise the same parsers, normalizers, validation, profiling, aggregation, redaction, and exporters used by the library and CLI:
 
@@ -484,17 +483,19 @@ fuzz/csv_fuzzer.zig
 fuzz/accesslog_fuzzer.zig
 ```
 
-Each harness bounds input to 1 MiB, treats parser errors as expected outcomes, and performs no magic-header bypass or artificial crash logic. Seed directories contain raw operational examples, including valid and malformed-but-realistic records. `.clusterfuzzlite/build.sh` writes all final executables directly to `$OUT` using the platform-provided sanitizer and fuzzing runtime.
+Each harness bounds input to 1 MiB and treats parser errors as expected outcomes. Seed directories contain raw operational examples, including valid and malformed-but-realistic records. `.clusterfuzzlite/build.sh` writes all final executables directly to `$OUT` using the platform-provided sanitizer and fuzzing runtime.
 
-## Repository verification
+## Development
 
-Run the local checks from a clean checkout with Zig 0.13.0:
+Run the project checks from a clean checkout with Zig 0.13.0:
 
 ```sh
 scripts/verify.sh
 ```
 
-The script runs builds and tests, checks the source-line and module ranges, checks local Git identity and commit count, scans for artificial defect controls and machine-specific paths, and rejects checked-in Zig cache/output directories.
+The script builds the CLI, runs unit and integration tests, builds the library example, and verifies that build artifacts are not tracked by Git.
+
+Continuous integration is defined in `.github/workflows/ci.yml`. See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines and [CHANGELOG.md](CHANGELOG.md) for release history. See [docs/verification.md](docs/verification.md) for CI and fuzzing details.
 
 ## License
 

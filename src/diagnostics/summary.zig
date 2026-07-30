@@ -22,7 +22,7 @@ pub const Summary = struct {
         switch (diagnostic.severity) {
             .note => self.notes += 1,
             .warning => self.warnings += 1,
-            .error => self.errors += 1,
+            .@"error" => self.errors += 1,
         }
         const index = codeIndex(diagnostic.code);
         if (index < self.by_code.len) self.by_code[index] += 1;
@@ -37,7 +37,7 @@ pub const Summary = struct {
         try writer.print("records={d} recovered={d} notes={d} warnings={d} errors={d} clean_rate={d:.4}\n", .{
             self.records, self.recovered_records, self.notes, self.warnings, self.errors, self.cleanRate(),
         });
-        for (self.by_code, 0..) |count, index| if (count != 0) try writer.print("  {s}: {d}\n", .{ codeAt(index).label(), count });
+        for (self.by_code, 0..) |count, index| { if (count != 0) try writer.print("  {s}: {d}\n", .{ codeAt(index).label(), count }); }
         if (self.dropped != 0) try writer.print("  dropped: {d}\n", .{self.dropped});
     }
 };

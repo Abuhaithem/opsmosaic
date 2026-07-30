@@ -82,7 +82,7 @@ fn looksLikeClassicSyslog(input: []const u8) bool {
     if (line.len < 16) return false;
     const month = line[0..3];
     const months = [_][]const u8{ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-    for (months) |candidate| if (std.mem.eql(u8, month, candidate)) return line[3] == ' ';
+    for (months) |candidate| { if (std.mem.eql(u8, month, candidate)) return line[3] == ' '; }
     return false;
 }
 
@@ -106,7 +106,7 @@ fn looksLikeEnv(input: []const u8) bool {
     const line = firstMeaningfulLine(input);
     const equal = std.mem.indexOfScalar(u8, line, '=') orelse return false;
     if (equal == 0) return false;
-    for (line[0..equal]) |ch| if (!(std.ascii.isAlphanumeric(ch) or ch == '_')) return false;
+    for (line[0..equal]) |ch| { if (!(std.ascii.isAlphanumeric(ch) or ch == '_')) return false; }
     return true;
 }
 
@@ -135,7 +135,7 @@ fn looksLikeCsv(input: []const u8) bool {
 
 fn countByte(input: []const u8, needle: u8) usize {
     var count: usize = 0;
-    for (input) |ch| if (ch == needle) count += 1;
+    for (input) |ch| { if (ch == needle) count += 1; }
     return count;
 }
 

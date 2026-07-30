@@ -244,7 +244,7 @@ pub fn coverage(table: *const Table, total_records: usize) f64 {
 
 fn latencyValue(record: *const record_mod.Record) ?record_mod.Value {
     const names = [_][]const u8{ "duration_ms", "latency_ms", "elapsed_ms", "request_time_ms" };
-    for (names) |name| if (record.getField(name)) |value| return value;
+    for (names) |name| { if (record.getField(name)) |value| return value; }
     return null;
 }
 
