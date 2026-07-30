@@ -1,0 +1,1 @@
+{"host":"edge-1","service":"gateway","network":{"source_ip":"192.0.2.1","status":502},"message":"retry"}
