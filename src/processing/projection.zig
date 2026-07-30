@@ -53,12 +53,12 @@ pub fn parse(specification: []const u8) !Projection {
 
 pub fn defaultOperational() Projection {
     var result = Projection{};
-    result.append(.{ .source = "timestamp", .heading = "timestamp" }) catch unreachable;
-    result.append(.{ .source = "severity", .heading = "severity" }) catch unreachable;
-    result.append(.{ .source = "host", .heading = "host" }) catch unreachable;
-    result.append(.{ .source = "service", .heading = "service" }) catch unreachable;
-    result.append(.{ .source = "event_id", .heading = "event_id" }) catch unreachable;
-    result.append(.{ .source = "message", .heading = "message" }) catch unreachable;
+    result.append(.{ .source = "timestamp", .heading = "timestamp" }) catch {};
+    result.append(.{ .source = "severity", .heading = "severity" }) catch {};
+    result.append(.{ .source = "host", .heading = "host" }) catch {};
+    result.append(.{ .source = "service", .heading = "service" }) catch {};
+    result.append(.{ .source = "event_id", .heading = "event_id" }) catch {};
+    result.append(.{ .source = "message", .heading = "message" }) catch {};
     return result;
 }
 

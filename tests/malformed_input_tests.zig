@@ -27,6 +27,6 @@ test "batch parser recovers after malformed records within limits" {
 }
 
 test "bounded stream reader rejects oversized lines" {
-    var parsed = opsmosaic.parseBatch(std.testing.allocator, "1234567890\n", null, .{ .format = .jsonl, .stream_limits = .{ .max_line_bytes = 4, .max_input_bytes = 64 } });
+    const parsed = opsmosaic.parseBatch(std.testing.allocator, "1234567890\n", null, .{ .format = .jsonl, .stream_limits = .{ .max_line_bytes = 4, .max_input_bytes = 64 } });
     try std.testing.expectError(error.LineTooLong, parsed);
 }

@@ -36,7 +36,7 @@ if grep -R -n -E 'FUZZ_FAULTS|TEST_CRASH|BUG_TRIGGER|BENCHMARK_DEFECT|HIDDEN_PAT
   exit 1
 fi
 
-if grep -R -n -E '/Users/|/home/[A-Za-z0-9_-]+|[A-Za-z]:\\\\Users\\\\' --exclude-dir=.git .; then
+if grep -R -n -E '/Users/|/home/[A-Za-z0-9_-]+|[A-Za-z]:\\\\Users\\\\' --exclude-dir=.git --exclude=verify.sh .; then
   echo "machine-specific path found" >&2
   exit 1
 fi

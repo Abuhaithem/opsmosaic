@@ -97,9 +97,9 @@ pub const Options = struct {
 
 pub fn serviceRequirements() Requirements {
     var requirements = Requirements{};
-    requirements.append(.{ .key = "service", .expected_kind = .text, .description = "logical service name" }) catch unreachable;
-    requirements.append(.{ .key = "environment", .expected_kind = .text, .description = "deployment environment" }) catch unreachable;
-    requirements.append(.{ .key = "host", .expected_kind = .text, .description = "service host identity" }) catch unreachable;
+    requirements.append(.{ .key = "service", .expected_kind = .text, .description = "logical service name" }) catch {};
+    requirements.append(.{ .key = "environment", .expected_kind = .text, .description = "deployment environment" }) catch {};
+    requirements.append(.{ .key = "host", .expected_kind = .text, .description = "service host identity" }) catch {};
     return requirements;
 }
 

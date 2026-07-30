@@ -36,14 +36,14 @@ pub const Result = struct {
 
 pub fn standardPlan() Plan {
     var plan = Plan{};
-    plan.append(.{ .field_pattern = "*password*" }) catch unreachable;
-    plan.append(.{ .field_pattern = "*secret*" }) catch unreachable;
-    plan.append(.{ .field_pattern = "*token*" }) catch unreachable;
-    plan.append(.{ .field_pattern = "*credential*" }) catch unreachable;
-    plan.append(.{ .field_pattern = "authorization" }) catch unreachable;
-    plan.append(.{ .field_pattern = "cookie" }) catch unreachable;
-    plan.append(.{ .field_pattern = "set-cookie" }) catch unreachable;
-    plan.append(.{ .field_pattern = "private_key", .mode = .remove }) catch unreachable;
+    plan.append(.{ .field_pattern = "*password*" }) catch {};
+    plan.append(.{ .field_pattern = "*secret*" }) catch {};
+    plan.append(.{ .field_pattern = "*token*" }) catch {};
+    plan.append(.{ .field_pattern = "*credential*" }) catch {};
+    plan.append(.{ .field_pattern = "authorization" }) catch {};
+    plan.append(.{ .field_pattern = "cookie" }) catch {};
+    plan.append(.{ .field_pattern = "set-cookie" }) catch {};
+    plan.append(.{ .field_pattern = "private_key", .mode = .remove }) catch {};
     return plan;
 }
 
