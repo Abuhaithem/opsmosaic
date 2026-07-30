@@ -1,0 +1,15 @@
+service:
+  name: gateway
+  replicas: 3
+  image: "registry.invalid/gateway:2026.07"
+  environment: production
+  tags:
+    - edge
+    - payments
+    - prod
+resources:
+  cpu_millis: 500
+  memory_mib: 768
+health:
+  path: /health
+  interval_seconds: 15
