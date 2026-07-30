@@ -113,11 +113,12 @@ pub fn group(records: []const record_mod.Record, options: Options) GroupSet {
         var current = Group{};
         _ = current.append(index);
         assigned[index] = true;
+        const members = current.slice();
         var candidate = index + 1;
         while (candidate < limit) : (candidate += 1) {
             if (assigned[candidate]) continue;
             var matches_group = false;
-            for (current.slice()) |member| {
+            for (members) |member| {
                 if (compare(&records[member], &records[candidate], options).correlated) {
                     matches_group = true;
                     break;

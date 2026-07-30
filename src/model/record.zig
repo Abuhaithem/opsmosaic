@@ -135,11 +135,16 @@ pub const Record = struct {
         if (std.mem.eql(u8, key, "destination_address")) if (self.network.destination_address) |v| return .{ .text = v };
         if (std.mem.eql(u8, key, "method")) if (self.network.method) |v| return .{ .text = v };
         if (std.mem.eql(u8, key, "path")) if (self.network.path) |v| return .{ .text = v };
-        if (std.mem.eql(u8, key, "status")) if (self.network.status) |v| return .{ .integer = @intCast(v) };
-        if (std.mem.eql(u8, key, "bytes")) if (self.network.bytes) |v| {
-            if (v <= std.math.maxInt(i64)) return .{ .integer = @intCast(v) };
-            return .{ .decimal = @floatFromInt(v) };
-        };
+        if (std.mem.eql(u8, key, "status")) {
+            return if (self.network.status) |v| .{ .integer = @intCast(v) } else null;
+        }
+        if (std.mem.eql(u8, key, "bytes")) {
+            if (self.network.bytes) |v| {
+                if (v <= std.math.maxInt(i64)) return .{ .integer = @intCast(v) };
+                return .{ .decimal = @floatFromInt(v) };
+            }
+            return null;
+        }
         return field_mod.find(self.fieldSlice(), key);
     }
 

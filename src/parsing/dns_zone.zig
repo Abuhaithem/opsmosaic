@@ -42,7 +42,8 @@ pub fn parseLine(line_raw: []const u8, context: common.ParseContext, state: *Zon
         state.default_ttl = try parseTtl(std.mem.trim(u8, line[4..], " \t"));
         return null;
     }
-    return try parseRecordLine(line, context, state.origin, state.default_ttl);
+    const record_scope = ZoneState{};
+    return try parseRecordLine(line, context, record_scope.origin, record_scope.default_ttl);
 }
 
 pub fn parseRecordLine(line: []const u8, context: common.ParseContext, origin: ?[]const u8, default_ttl: ?u32) common.ParseError!record_mod.Record {

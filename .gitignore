@@ -6,3 +6,6 @@ zig-out/
 *.profraw
 *.log.tmp
 opsmosaic-fuzz-build/
+
+# Local benchmark answer-key artifacts (PoCs, fix patches, descriptions) — never commit
+benchmark_artifacts/
