@@ -1,0 +1,8 @@
+.zig-cache/
+zig-out/
+.cache/
+*.o
+*.a
+*.profraw
+*.log.tmp
+opsmosaic-fuzz-build/
